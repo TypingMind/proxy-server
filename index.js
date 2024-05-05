@@ -14,16 +14,16 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(proxy(process.env.TARGET));
 
-console.log(process.env);
-const options = {
-  key: fs.readFileSync(path.join(__dirname, 'key.pem')),
-  cert: fs.readFileSync(path.join(__dirname, 'cert.pem')),
-};
-
 const server =
   process.env.USE_HTTPS == 'true'
-    ? https.createServer(options, app)
-    : http.createServer(options, app);
+    ? https.createServer(
+        {
+          key: fs.readFileSync(path.join(__dirname, 'key.pem')),
+          cert: fs.readFileSync(path.join(__dirname, 'cert.pem')),
+        },
+        app
+      )
+    : http.createServer({}, app);
 
 const port = process.env.PORT || 5000;
 
