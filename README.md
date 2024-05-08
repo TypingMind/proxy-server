@@ -14,7 +14,7 @@ https://nodejs.org/en
 npm install
 ```
 
-3. Set proxy target (`TARGET`) in .env file. `PORT` and `USE_HTTPS` are optional, you are free to alter or get rid of them.
+3. You can set proxy port and https in .env file, `PORT` and `USE_HTTPS` are optional, you are free to alter or get rid of them.
 
 4. Install and generate HTTPS certificates (OPTIONAL)
 
@@ -39,12 +39,19 @@ mkcert -key-file key.pem -cert-file cert.pem localhost
 npm start
 ```
 
-Your proxy will be at `http://localhost:5000` or `https://localhost:5000` (if you use https).
+Your proxy will be at `http://localhost:9000` or `https://localhost:9000` (if you use https).
+
+The proxy target must be included in the request headers, for example:
+
+```js
+fetch('https://localhost:9000', {
+  method: 'POST',
+  headers: {
+    'x-target-url': 'https://api.anthropic.com/v1/messages',
+    // ... other header values
+  },
+  // ... other values
+});
+```
 
 It will proxy your request with the corresponding path to the target.
-
-For example, if your target is `https://api.anthropic.com`:
-
-```
-https://localhost:5000/v1/messages -> https://api.anthropic.com/v1/messages
-```

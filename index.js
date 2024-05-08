@@ -12,7 +12,16 @@ const proxy = require('express-http-proxy');
 
 app.use(cors());
 app.use(morgan('dev'));
-app.use(proxy(process.env.TARGET));
+app.use((req, res, next) => {
+  const url = req.headers['x-target-url'];
+  const target = new URL(url);
+
+  return proxy(target.origin, {
+    proxyReqPathResolver: () => {
+      return target.pathname + target.search;
+    },
+  })(req, res, next);
+});
 
 const server =
   process.env.USE_HTTPS == 'true'
@@ -25,7 +34,7 @@ const server =
       )
     : http.createServer({}, app);
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 9000;
 
 server.listen(port, () => {
   process.env.USE_HTTPS == 'true'
