@@ -16,6 +16,8 @@ app.use((req, res, next) => {
   const url = req.headers['x-target-url'];
   const target = new URL(url);
 
+  delete req.headers['x-target-url'];
+
   return proxy(target.origin, {
     proxyReqPathResolver: () => {
       return target.pathname + target.search;
@@ -38,6 +40,6 @@ const port = process.env.PORT || 9000;
 
 server.listen(port, () => {
   process.env.USE_HTTPS == 'true'
-    ? console.log(`Proxy listening on https://localhost:${port}`)
+    ? console.log(`Proxy listening on https://127.0.0.1:${port}`)
     : console.log(`Proxy listening on http://localhost:${port}`);
 });

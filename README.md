@@ -25,10 +25,10 @@ npm install
 mkcert -install
 ```
 
-- Generate certificates in the current folder:
+- Generate certificates in the current folder, this is for the host `127.0.0.1` (recommended, it will avoid browsers caching the certificate and affecting other localhost development, you can still use `localhost` instead) :
 
 ```
-mkcert -key-file key.pem -cert-file cert.pem localhost
+mkcert -key-file key.pem -cert-file cert.pem 127.0.0.1
 ```
 
 - Set `USE_HTTPS=true` in .env
@@ -39,7 +39,7 @@ mkcert -key-file key.pem -cert-file cert.pem localhost
 npm start
 ```
 
-Your proxy will be at `http://localhost:9000` or `https://localhost:9000` (if you use https).
+Your proxy will be at `http://localhost:9000` or `https://127.0.0.1:9000` if you use https (or https://localhost:9000 if you generated cerfiticates with `localhost`)
 
 The proxy target must be included in the request headers, for example:
 
